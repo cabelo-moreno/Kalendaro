@@ -1,0 +1,4 @@
+Relationship 3866e2ee-e24d-ee1c-350c-570005ea20ac
+	FromColumn: GravaDatoj.Dato
+	ToColumn: Kalendaro.Dato
+

@@ -1,0 +1,50 @@
+Table GravaDatoj
+	LineageTag: 392b2296-3795-4e3c-9df3-ce7d2374f2c2
+
+	Column Dato
+		FormatString: dd/mm/yyyy
+		LineageTag: 96bef162-6e3c-4d95-adf5-bb465ef2bd88
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [Dato]
+
+		Annotation SummarizationSetBy = Automatic
+
+		Annotation UnderlyingDateTimeDataType = Date
+
+		Annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	Column Okazo
+		LineageTag: a0c85de7-9e01-4df1-ac8b-d7708a234fa1
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [Okazo]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column Tipo
+		LineageTag: 373b934b-ceab-4947-b68a-a455aea0fda5
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [Tipo]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column Bildo
+		LineageTag: 557bdb52-a934-4f47-a1b9-c84d5188acd5
+		DataCategory: ImageUrl
+		IsNameInferred
+		SourceColumn: [Bildo]
+
+	Column Ligo
+		LineageTag: 2d5402f4-42a2-489f-97a2-4f2f3fbcd3b5
+		DataCategory: WebUrl
+		IsNameInferred
+		SourceColumn: [Ligo]
+
+	Partition GravaDatoj = Calculated
+		Mode: Import
+		Source = Kalendaro.Gravadatoj(2025)
+
+	Annotation PBI_Id = fbe9fedb780e43718017bcfc91d80a16
+

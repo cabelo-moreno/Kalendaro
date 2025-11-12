@@ -1,0 +1,334 @@
+Function 'Kalendaro.Movadatoj' = ```
+		(
+		    --jaro numero
+		    jaro: int64,
+		    --dato nomo: (Pasko,Karnavalo,Sankto,Corpus)
+		    datonomo: string
+		)=>
+		        VAR A = MOD(jaro, 19)
+		        VAR B = QUOTIENT(jaro, 100)
+		        VAR C = MOD(jaro, 100)
+		        VAR D = QUOTIENT(B, 4)
+		        VAR E = MOD(B, 4)
+		        VAR F = QUOTIENT(B + 8, 25)
+		        VAR G = QUOTIENT(B - F + 1, 3)
+		        VAR H = MOD(19 * A + B - D - G + 15, 30)
+		        VAR I = QUOTIENT(C, 4)
+		        VAR K = MOD(C, 4)
+		        VAR L = MOD(32 + 2 * E + 2 * I - H - K, 7)
+		        VAR M = QUOTIENT(A + 11 * H + 22 * L, 451)
+		        VAR Monato = QUOTIENT(H + L - 7 * M + 114, 31)
+		        VAR Tago = MOD(H + L - 7 * M + 114, 31) + 1
+		
+		        VAR Pasko = DATE(jaro, Monato, Tago)
+		
+		        RETURN 
+		        SWITCH(TRUE(),
+		            datonomo = "Pasko", Pasko,
+		            datonomo = "Karnavalo", Pasko - 47,
+		            datonomo = "Sankto", Pasko - 2,
+		            datonomo = "Corpus", Pasko + 60
+		            )
+		```
+	LineageTag: 1fa3f21c-7f77-46a4-9356-3dc223f2a312
+
+Function 'Kalendaro.SimboloTago' = ```
+		( 
+		        --Kolumno kiu indikas la daton
+		        DatKolumno: anyref, 
+		        --Kolumno kiu indikas la numero de semajntagon (Mallongnomo)
+		        SemajnKolumno: anyref,
+		        --Kolumno kiu indicas la grupo de daton (Ekzemplo.: Internacia/Esperanta)
+		        DatumGrupo: anyref,
+		        --Grandeco de Letero
+		        Grandeco: numeric 
+		     ) =>
+		VAR TekstoTago = 
+		SWITCH(
+			TRUE(),
+		    YEAR(SELECTEDVALUE(DatKolumno))=1900, "",
+			ISBLANK(SELECTEDVALUE(DatKolumno)), SELECTEDVALUE(Kalendaro[SemajnoTago mln]),
+		    FORMAT(DAY(SELECTEDVALUE(DatKolumno)),"@")
+		    )
+		    
+		VAR DatumGrupo = SELECTEDVALUE(DatumGrupo)
+		
+		VAR Semajnkoloro =
+		    SWITCH(
+		        TRUE(),
+		        WEEKDAY(MAX(DatKolumno))=1, "#E53935",   -- ruĝa
+		        WEEKDAY(MAX(DatKolumno))=7, "#757575",   -- griza
+		        "black" --nigra
+		    )
+		VAR SvgTitoloj =
+		"data:image/svg+xml;utf8,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+		  <text x='50%' y='58%' font-size='" & Grandeco & "' fill='" & Semajnkoloro & "'
+		    font-family='Arial' font-weight='bold' text-anchor='middle' dominant-baseline='middle'>"
+		    & TekstoTago & "</text>
+		</svg>"
+		
+		-------------------------------------
+		-- 🇧🇷 Brazilo
+		-------------------------------------
+		VAR SvgBrazilo =
+		"data:image/svg+xml;utf8,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+		  <clipPath id='rounded'><rect width='100' height='100' rx='15' ry='15'/></clipPath>
+		  <g clip-path='url(#rounded)'>
+		    <polygon points='0,0 100,0 0,100' fill='#B6E388'/>
+		    <polygon points='100,0 100,100 0,100' fill='#FFF59D'/>
+		  </g>
+		  <rect x='0' y='0' width='100' height='100' rx='15' ry='15' fill='none' stroke='#555' stroke-width='1'/>
+		  <text x='50%' y='58%' font-size='" & Grandeco & "' fill='" & Semajnkoloro & "' font-family='Arial' font-weight='bold'
+		    text-anchor='middle' dominant-baseline='middle'>" & TekstoTago & "</text>
+		</svg>"
+		
+		-------------------------------------
+		-- 🏹 Esperanto
+		-------------------------------------
+		VAR SvgEsperanto =
+		"data:image/svg+xml;utf8,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+		  <rect width='100' height='100' rx='15' ry='15' fill='#A7F3D0'/>
+		  <polygon points='50,18 60,43 87,43 65,58 73,85 50,68 27,85 35,58 13,43 40,43' fill='white'/>
+		  <text x='50%' y='58%' font-size='" & Grandeco & "' fill='" & Semajnkoloro & "' font-family='Arial' font-weight='bold'
+		    text-anchor='middle' dominant-baseline='middle'>" & TekstoTago & "</text>
+		</svg>"
+		
+		-------------------------------------
+		-- 🌍 Mondo/Internacia
+		-------------------------------------
+		VAR SvgMondo =
+		"data:image/svg+xml;utf8,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+		  <clipPath id='rounded'><rect width='100' height='100' rx='15' ry='15'/></clipPath>
+		  <g clip-path='url(#rounded)'>
+		    <polygon points='0,0 100,0 0,100' fill='#93C5FD'/>
+		    <polygon points='100,0 100,100 0,100' fill='#BFDBFE'/>
+		  </g>
+		  <rect x='0' y='0' width='100' height='100' rx='15' ry='15' fill='none' stroke='#555' stroke-width='1'/>
+		  <text x='50%' y='58%' font-size='" & Grandeco & "' fill='" & Semajnkoloro & "' font-family='Arial' font-weight='bold'
+		    text-anchor='middle' dominant-baseline='middle'>" & TekstoTago & "</text>
+		</svg>"
+		
+		-------------------------------------
+		-- 🎂 Persona / Naskiĝtago
+		-------------------------------------
+		VAR SvgNaskigtago =
+		"data:image/svg+xml;utf8,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+		  <clipPath id='rounded'><rect width='100' height='100' rx='15' ry='15'/></clipPath>
+		  <g clip-path='url(#rounded)'>
+		    <polygon points='0,0 100,0 0,100' fill='#FDBA74'/> <!-- Laranja claro -->
+		    <polygon points='100,0 100,100 0,100' fill='#F97316'/> <!-- Laranja forte -->
+		  </g>
+		  <rect x='0' y='0' width='100' height='100' rx='15' ry='15' fill='none' stroke='#555' stroke-width='1'/>
+		  <text x='50%' y='58%' font-size='" & Grandeco & "' fill='" & Semajnkoloro & "' font-family='Arial' font-weight='bold'
+		    text-anchor='middle' dominant-baseline='middle'>" & TekstoTago & "</text>
+		</svg>"
+		
+		
+		-------------------------------------
+		-- ⚫ Simpla Patrono
+		-------------------------------------
+		VAR SvgNormal =
+		"data:image/svg+xml;utf8,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+		  <text x='50%' y='58%' font-size='" & Grandeco & "' fill='" & Semajnkoloro & "' font-family='Arial' font-weight='bold'
+		    text-anchor='middle' dominant-baseline='middle'>" & TekstoTago & "</text>
+		</svg>"
+		
+		-------------------------------------
+		-- 🔁 Fina reveno
+		-------------------------------------
+		RETURN
+		IF(HASONEVALUE(DatKolumno) && SELECTEDVALUE(Kalendaro[# SemajnTago]) >= 1, 
+		SWITCH(
+		  TRUE(),
+		  DatumGrupo = "Brazilo", SvgBrazilo,
+		  DatumGrupo = "Esperanto", SvgEsperanto,
+		  DatumGrupo = "Personaj", SvgNaskigtago,
+		  DatumGrupo = "Internacia" || DatumGrupo = "Mondo", SvgMondo,
+		  SvgNormal
+		),SvgTitoloj
+		)
+		```
+	LineageTag: 4fc3732d-a51e-49b6-bacb-669940bf1745
+
+Function 'Kalendaro.Generatoro' = ```
+		(
+		  --jaro de la kalendaro
+		  jaro: int64
+		)=>
+		var _intervallo = CALENDAR(DATE(jaro,1,1),DATE(jaro,12,31))
+		var _blank = DATATABLE("Date",DATETIME,{{"1900-01-01"}})
+		
+		var _union = UNION(_blank, _intervallo) --used only to hide a column name
+		
+		var _numerojn = --numeric parts of the date
+		        SELECTCOLUMNS(
+		            _union,
+		            [Date],
+		            "# Jaro", IF(YEAR([Date])=1900,BLANK(),YEAR([Date])),
+		            "# Monato", IF(YEAR([Date])=1900,BLANK(),Month([Date])),
+		            "# Tago", IF(YEAR([Date])=1900,BLANK(),Day([Date])),
+		            "# Semestro", IF(YEAR([Date])=1900,BLANK(),ROUNDUP(MONTH([Date])/6,0)),
+		            "# Trimestro", IF(YEAR([Date])=1900,BLANK(),ROUNDUP(MONTH([Date])/3,0)),
+		            "# JarSemajno", IF(YEAR([Date])=1900,BLANK(),WEEKNUM([Date])),
+		            "# SemajnTago", IF(YEAR([Date])=1900,BLANK(),WEEKDAY([Date]))
+		        )
+		var _nomojn = --names of month and week
+		        ADDCOLUMNS(
+		            _numerojn, 
+		            "Monato", --month names
+		            Switch( [# Monato],1,"Januaro",2,"Februaro",3,"Marto",4,"Aprilo",5,"Majo",6,"Junio",7,"Julio",8,"Aŭgusto",9,"Septembro",10,"Oktobro",11,"Novembro",12,"Decembro"),
+		            "SemajnoTago", --weekday names
+		            Switch( [# SemajnTago],1,"Dimanĉo",2,"Lundo",3,"Mardo",4,"Merkredo",5,"Ĵaŭdo",6,"Vendredo",7,"Sabato")
+		        )
+		var _mallongnomojn = --short names
+		        ADDCOLUMNS(
+		            _nomojn, 
+		            "Monato mln", Left([Monato],3), --month abbrev
+		            "SemajnoTago mln", Left([SemajnoTago],2) --weekday abbrev
+		        )
+		
+		var _aksos = --axis
+		        ADDCOLUMNS(
+		            _mallongnomojn,
+		            "$_akso_kolumnoj", [# Monato] - (([# Trimestro]-1)*3),
+		            "$_akso_vicoj", IF([# JarSemajno] - WEEKNUM(DATE(jaro,MONTH([Date]),1)) + 1<=0,1,[# JarSemajno] - WEEKNUM(DATE(jaro,MONTH([Date]),1)) + 1)
+		        )
+		
+		return
+		    _aksos
+		```
+	LineageTag: 2da3a142-0e01-48b9-9277-5d646e20fc13
+
+Function 'Kalendaro.Gravadatoj' = ```
+		(
+			--Jaro Numero
+		    jaro:int64
+		)=>
+		UNION(
+		
+		    // 🏹 Esperanto
+		    ROW("Dato", DATE(jaro, 7, 26), "Okazo", "Unua libro publikigita (Naskiĝo de Esperanto)", "Tipo", "Esperanto", 
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/d/d6/Unua_libro_per_russi_-_1887_-_1a_edizione_-_copertina_fronte.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Unua_libro"),
+		    ROW("Dato", DATE(jaro, 8, 5), "Okazo", "Unua Universala Kongreso en Bulonjo-ĉe-Maro", "Tipo", "Esperanto",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/9/9b/Uk-1908-2.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Unua_Universala_Kongreso"),
+		    ROW("Dato", DATE(jaro, 12, 10), "Okazo", "UNESKO agnoskas Esperanton", "Tipo", "Esperanto",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Universala_Esperanto-Asocio.png/250px-Universala_Esperanto-Asocio.png",
+		        "Ligo", "https://eo.wikipedia.org/wiki/UNESKO_kaj_Esperanto"),
+		    ROW("Dato", DATE(jaro, 12, 15), "Okazo", "Naskiĝtago de Zamenhof (Tago de Esperanto)", "Tipo", "Esperanto",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/1908-kl-t-zamenhof.jpg/800px-1908-kl-t-zamenhof.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Ludoviko_Lazaro_Zamenhof"),
+		    ROW("Dato", DATE(jaro, 8, 9), "Okazo", "Unua Esperanto-gazeto publikigita", "Tipo", "Esperanto",
+		        "Bildo", "https://uea.facila.org/uploads/monthly_2024_09/LaEsperantisto2.jpg.70ca56a15bad544ca8d76f32eabcc3bc.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/La_Esperantisto"),
+		    ROW("Dato", DATE(jaro, 7, 20), "Okazo", "Interreta Esperanto-movado kreskas", "Tipo", "Esperanto",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/1912-privat-historio.jpg/250px-1912-privat-historio.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Esperanto_en_Interreto"),
+		    ROW("Dato", DATE(jaro, 12, 3), "Okazo", "Naskiĝtago de la Universala Ligo", "Tipo", "Esperanto",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Universala_Ligo_logo.png",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Universala_Ligo"),
+		
+		    // 🇧🇷 Brasil
+		    ROW("Dato", DATE(jaro, 1, 1), "Okazo", "Confraternização Universal / Ano Novo", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/1/1e/New_Year_Fireworks.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Ano-Novo"),
+		    ROW("Dato", DATE(jaro, 4, 21), "Okazo", "Dia de Tiradentes", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/7/7e/Tiradentes_por_Pedro_Américo.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Tiradentes"),
+		    ROW("Dato", DATE(jaro, 5, 1), "Okazo", "Dia do Trabalho", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/3/37/Workers_Day.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Dia_do_Trabalho"),
+		    ROW("Dato", DATE(jaro, 9, 7), "Okazo", "Independência do Brasil", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/1/1a/Independencia_do_Brasil_1888.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Independ%C3%AAncia_do_Brasil"),
+		    ROW("Dato", DATE(jaro, 10, 12), "Okazo", "Nossa Senhora Aparecida / Dia das Crianças", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/2/2a/Nossa_Senhora_Aparecida.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Nossa_Senhora_Aparecida"),
+		    ROW("Dato", DATE(jaro, 11, 2), "Okazo", "Dia de Finados", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/f/f7/Cemiterio_Sao_Paulo_2019.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Dia_dos_Finados"),
+		    ROW("Dato", DATE(jaro, 11, 15), "Okazo", "Proclamação da República", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/6/6c/Proclamation_of_the_Republic_Brazil_1889.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Proclama%C3%A7%C3%A3o_da_Rep%C3%BAblica_do_Brasil"),
+		    ROW("Dato", DATE(jaro, 12, 25), "Okazo", "Natal", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/4/4e/Christmas_tree.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Natal"),
+		
+		    ROW("Dato", Kalendaro.Movadatoj(jaro, "Karnavalo"), "Okazo", "Carnaval", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/4/4f/Samba_dancers_Rio.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Carnaval_do_Brasil"),
+		    ROW("Dato", Kalendaro.Movadatoj(jaro, "Sankto"), "Okazo", "Sexta-Feira Santa", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/6/68/Cristo_crucificado.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Sexta-feira_Santa"),
+		    ROW("Dato", Kalendaro.Movadatoj(jaro, "Pasko"), "Okazo", "Páscoa", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/0/05/Easter_eggs.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/P%C3%A1scoa"),
+		    ROW("Dato", Kalendaro.Movadatoj(jaro, "Corpus"), "Okazo", "Corpus Christi", "Tipo", "Brazilo",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/1/1e/Corpus_Christi_Campinas.jpg",
+		        "Ligo", "https://pt.wikipedia.org/wiki/Corpus_Christi"),
+		
+		    // 🌍 Internacia
+		    ROW("Dato", DATE(jaro, 3, 8), "Okazo", "Internacia Tago de Virinoj", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/d/d3/International_Women%27s_Day.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Internacia_Virina_Tago"),
+		    ROW("Dato", DATE(jaro, 4, 22), "Okazo", "Tera Tago", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Tera_Tago"),
+		    ROW("Dato", DATE(jaro, 5, 9), "Okazo", "Tago de Eŭropo", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Europe.svg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Tago_de_E%C5%ADropo"),
+		    ROW("Dato", DATE(jaro, 6, 5), "Okazo", "Tago de la Medio", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/6/6a/Earth_day_environment.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Monda_Medio-Tago"),
+		    ROW("Dato", DATE(jaro, 9, 21), "Okazo", "Internacia Tago de Paco", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/d/dd/Peace_dove_in_flight_with_olive_branch.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Internacia_Tago_de_Paco"),
+		    ROW("Dato", DATE(jaro, 10, 24), "Okazo", "Tago de Unuiĝintaj Nacioj", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/2/26/Flag_of_the_United_Nations.svg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Unuiĝintaj_Nacioj"),
+		    ROW("Dato", DATE(jaro, 12, 10), "Okazo", "Tago de Homaj Rajtoj", "Tipo", "Internacia",
+		        "Bildo", "https://upload.wikimedia.org/wikipedia/commons/a/a4/Universal_Declaration_of_Human_Rights_1948.jpg",
+		        "Ligo", "https://eo.wikipedia.org/wiki/Homaj_ra%C4%9Dtoj"),
+		
+		    // 🧭 Personaj (LinkedIn)
+		    ROW("Dato", DATE(jaro, 2, 25), "Okazo", "Naskiĝtago de Ricardo 'Cabelo' Moreno", "Tipo", "Personaj",
+		        "Bildo", "https://media.licdn.com/dms/image/v2/D4D03AQHZnsrFyNfe_Q/profile-displayphoto-crop_800_800/B4DZlx7ZytIYAM-/0/1758553022335?e=1764806400&v=beta&t=8RG8JcSAzdN0YaYRbU2d3wQeR7LJ1ggd_EWURHsjJnA",
+		        "Ligo", "https://www.linkedin.com/in/kblo/")
+		)
+		```
+	LineageTag: 653c5682-67e7-4eb9-8723-ba2a459f1bd7
+
+Function 'Kalendaro.ElektitaMonato' = ```
+		(
+		  --monatnomo Kolumno
+		  monato: anyref,
+		  --grandeco de la letero
+		  grandeco: int64,
+		  --vicoj por ignori
+		  akso_vicoj: anyref,
+		  --kolumno por ignori
+		  akso_kolumno: anyref
+		)=>
+		var svg = 
+		"data:image/svg+xml;utf8," &
+		"<svg xmlns='http://www.w3.org/2000/svg' width='400' height='40'>
+		    <rect width='400' height='35' fill='#1788cf' rx='6' ry='6'/>
+		    <text x='200' y='26' font-size='"& grandeco &"' font-family='Segoe UI'
+		          text-anchor='middle' fill='white'>" & SELECTEDVALUE(monato) & "</text>
+		</svg>"
+		var blanksvg = 
+		"data:image/svg+xml;utf8," &
+		"<svg xmlns='http://www.w3.org/2000/svg' width='100' height='40'></svg>"
+		
+		RETURN
+		IF(ISFILTERED(akso_vicoj) || ISBLANK(SELECTEDVALUE(akso_kolumno)), blanksvg, svg)
+		```
+	LineageTag: eadd7ce6-70aa-4e4a-b1c9-898c16eeb41c
+

@@ -1,0 +1,196 @@
+Table Kalendaro
+	LineageTag: 382febd8-feaa-4585-bd8a-2b357c5f40d0
+
+	Measure 'SVG Tago' = Kalendaro.SimboloTago(Kalendaro[Dato],Kalendaro[SemajnoTago mln],GravaDatoj[Tipo],50)
+		DisplayFolder: Metriko
+		LineageTag: a2d47be1-0f3d-4e48-ae82-f5c010930239
+		DataCategory: ImageUrl
+
+	Measure 'Elektita Monato' = Kalendaro.ElektitaMonato(Kalendaro[Monato], 25, Kalendaro[$_akso_vicoj], Kalendaro[# Trimestro])
+		DisplayFolder: Metriko
+		LineageTag: d7436665-5b73-42a2-9687-54b6d3bcc811
+		DataCategory: ImageUrl
+
+	Column Dato
+		FormatString: dd/mm/yyyy
+		DisplayFolder: Dato
+		LineageTag: 48fc6ea0-28e2-4adb-b89c-89db1223adeb
+		SummarizeBy: None
+		SourceColumn: [Date]
+
+		Annotation SummarizationSetBy = Automatic
+
+		Annotation UnderlyingDateTimeDataType = Date
+
+		Annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	Column '# Jaro'
+		DisplayFolder: Numero
+		LineageTag: c50cc54a-72c4-4e7f-b706-652d0485df72
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# Jaro]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column '# Monato'
+		FormatString: ;;;
+		DisplayFolder: Numero
+		LineageTag: 29556a5b-b9d3-4058-b6e6-d0fd9aec8033
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# Monato]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column '# Tago'
+		FormatString: ;;;
+		DisplayFolder: Numero
+		LineageTag: 55b887e4-f6b2-47d8-914b-6b5010790088
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# Tago]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column '# Semestro'
+		DataType: Int64
+		FormatString: ;;;
+		DisplayFolder: Numero
+		LineageTag: 3858b400-3ddf-4367-9436-581c2d4c97a4
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# Semestro]
+
+		Annotation SummarizationSetBy = Automatic
+
+		Annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	Column '# Trimestro'
+		DataType: Int64
+		FormatString: ;;;
+		DisplayFolder: Numero
+		LineageTag: f0302fba-e128-4455-9de5-6a6e308181e0
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# Trimestro]
+
+		Annotation SummarizationSetBy = Automatic
+
+		Annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	Column '# JarSemajno'
+		FormatString: ;;;
+		DisplayFolder: Numero
+		LineageTag: e28ea055-0b83-4baf-8ae5-04133089c58b
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# JarSemajno]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column '# SemajnTago'
+		FormatString: ;;;
+		DisplayFolder: Numero
+		LineageTag: 8baa48d7-c235-4440-8f5c-2aac16726054
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [# SemajnTago]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column Monato
+		DisplayFolder: Nomo
+		LineageTag: bcd403a8-0045-47ed-8209-47dc94e6a02e
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [Monato]
+		SortByColumn: '# Monato'
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column SemajnoTago
+		DisplayFolder: Nomo
+		LineageTag: 567ac587-aba6-4053-8c7d-405286587522
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [SemajnoTago]
+		SortByColumn: '# SemajnTago'
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column 'Monato mln'
+		DisplayFolder: Mallongnomo
+		LineageTag: 8c79a81a-03ab-4d04-b554-f3e1d87a06b5
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [Monato mln]
+		SortByColumn: '# Monato'
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column 'SemajnoTago mln'
+		DisplayFolder: Mallongnomo
+		LineageTag: 104b811d-7cda-4e82-83a0-37799784c4af
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [SemajnoTago mln]
+		SortByColumn: '# SemajnTago'
+
+		Annotation SummarizationSetBy = Automatic
+
+	Column $_akso_kolumnoj
+		DataType: Int64
+		FormatString: ;;;
+		DisplayFolder: Aksoj
+		LineageTag: 317bd6a8-35bd-4d10-8abf-5c289fc507b0
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [$_akso_kolumnoj]
+
+		Annotation SummarizationSetBy = Automatic
+
+		Annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	Column $_akso_vicoj
+		FormatString: ;;;
+		DisplayFolder: Aksoj
+		LineageTag: 385bc1b6-efe6-4dc7-a92a-34bb31ede54c
+		SummarizeBy: None
+		IsNameInferred
+		SourceColumn: [$_akso_vicoj]
+
+		Annotation SummarizationSetBy = Automatic
+
+	Partition Kalendaro = Calculated
+		Mode: Import
+		Source = Kalendaro.Generatoro(2025)
+
+	Calendar Esperanto
+		LineageTag: 8bbb9307-112d-4a7a-9e62-970b52a52839
+
+		CalendarColumnGroup = Year
+			PrimaryColumn: '# Jaro'
+
+		CalendarColumnGroup = Quarter
+			PrimaryColumn: '# Trimestro'
+
+		CalendarColumnGroup = Month
+			PrimaryColumn: '# Monato'
+			AssociatedColumn: 'Monato mln'
+
+		CalendarColumnGroup = WeekOfYear
+			PrimaryColumn: '# JarSemajno'
+
+		CalendarColumnGroup = Date
+			PrimaryColumn: Dato
+
+		CalendarColumnGroup = DayOfMonth
+			PrimaryColumn: '# Tago'
+
+		CalendarColumnGroup = DayOfWeek
+			PrimaryColumn: '# SemajnTago'
+			AssociatedColumn: 'SemajnoTago mln'
+
+	Annotation PBI_Id = 59f1de66f41c4cd8a5aa3ee0321f3292
+

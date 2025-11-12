@@ -1,0 +1,25 @@
+Model Model
+	Culture: en-US
+	DefaultPowerBIDataSourceVersion: PowerBI_V3
+	SourceQueryCulture: pt-BR
+	DataAccessOptions
+		LegacyRedirects
+		ReturnErrorValuesAsNull
+
+ExtendedProperty TabularEditor_DeploymentMetadata = {"User":"GANDALF\\ricar","Time":"2025-11-11T22:09:16.2197296-03:00","ClientMachine":"GANDALF","DeploymentMode":"SaveUI","TabularEditorBuild":"2.27.9403.24625"}
+
+Annotation __PBI_TimeIntelligenceEnabled = 0
+
+Annotation __TEdtr = 1
+
+Annotation PBI_ProTooling = ["TMDLView_Desktop"]
+
+Annotation PBI_QueryOrder = []
+
+Annotation TabularEditor_SerializeOptions = {"IgnoreInferredObjects":true,"IgnoreInferredProperties":true,"IgnoreTimestamps":true,"SplitMultilineStrings":true,"PrefixFilenames":false,"LocalTranslations":false,"LocalPerspectives":false,"SortArrays":false,"LocalRelationships":false,"Levels":["Data Sources","Perspectives","Relationships","Roles","Shared Expressions","Tables","Tables/Calculation Items","Tables/Columns","Tables/Hierarchies","Tables/Measures","Tables/Partitions","Translations"],"TmdlOptions":{"CasingStyle":"Pascalcase","NewLineStyle":"WindowsStyle"}}
+
+ref Table Kalendaro
+ref Table GravaDatoj
+
+ref CultureInfo en-US
+
