@@ -6,3 +6,6 @@ https://app.powerbi.com/view?r=eyJrIjoiOGQ0YjQ3NDMtNjlhZC00ZGI3LTlhZTEtMTE0YjE2M
 
 Image
 <img width="1228" height="872" alt="image" src="https://github.com/user-attachments/assets/fe3ae72a-fa94-46f5-a4a7-a824bcdde861" />
+
+Demonstration video of the hide values feature (ask me if you need some translation)
+https://www.linkedin.com/feed/update/urn:li:activity:7394200918746972160/
